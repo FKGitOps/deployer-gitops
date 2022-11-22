@@ -17,6 +17,7 @@ jobs:
       # Clone the deployer repo
       - name: Clone the deployer repo
         run: |
+          cd ~
           rm -rf ~/cloud-pak-deployer
           git clone https://github.com/IBM/cloud-pak-deployer.git
           
