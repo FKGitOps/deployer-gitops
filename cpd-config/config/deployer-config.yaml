@@ -14,6 +14,7 @@ openshift:
   ocp_version: 4.10.34
   domain_name: dapper-test.eu
   control_plane_flavour: m5.2xlarge
+  control_plane_nodes: 3
   compute_flavour: m5.4xlarge
   compute_nodes: 3
   infrastructure:
