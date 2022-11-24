@@ -49,7 +49,7 @@ jobs:
         env:
           OCP_PULLSECRET: ${{ secrets.OCP_PULLSECRET }}
         run: |
-          echo $OCP_PULL_SECRET > ${{ runner.temp }}/ocp_pullsecret.json
+          echo $OCP_PULL_SECRET > $CONFIG_DIR/ocp_pullsecret.json
           
       - name: Set vault secrets
         env:
@@ -58,7 +58,7 @@ jobs:
         run: |
           ~/cloud-pak-deployer/cp-deploy.sh vault set -vs aws-access-key -vsv $AWS_ACCESS_KEY_ID
           ~/cloud-pak-deployer/cp-deploy.sh vault set -vs aws-secret-access-key -vsv $AWS_SECRET_ACCESS_KEY
-          ~/cloud-pak-deployer/cp-deploy.sh vault set -vs ocp-pullsecret -vsf ${{ runner.temp }}/ocp_pullsecret.json
+          ~/cloud-pak-deployer/cp-deploy.sh vault set -vs ocp-pullsecret -vsf $CONFIG_DIR/ocp_pullsecret.json
           ~/cloud-pak-deployer/cp-deploy.sh vault set -vs ocp-ssh-pub-key -vsf ~/.ssh/id_rsa.pub
                   
       - name: List vault secrets
