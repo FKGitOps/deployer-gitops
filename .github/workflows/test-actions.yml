@@ -19,7 +19,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         run: |
-          echo "Access key ID: $AWS_ACCESS_KEY_ID"
+          echo "Access key ID: $AWS_ACCESS_KEY_ID" | tee -a /tmp/aws-access-key-id.log
 
       # Clone the deployer repo
       - name: Clone the deployer repo
