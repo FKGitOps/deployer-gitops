@@ -38,7 +38,7 @@ jobs:
         env:
           OCP_PULLSECRET: ${{ secrets.OCP_PULLSECRET }}
         run: |
-          echo $OCP_PULL_SECRET > /tmp/ocp_pullsecret.json
+          echo $OCP_PULL_SECRET > ${{ runner.temp }}/ocp_pullsecret.json
           
       - name: Set vault secrets
         env:
