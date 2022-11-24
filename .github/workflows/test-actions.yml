@@ -13,14 +13,6 @@ jobs:
     runs-on: self-hosted
 
     steps:
-
-      # Log secret
-      - name: Log secret
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        run: |
-          echo "Access key ID: $AWS_ACCESS_KEY_ID" | tee -a /tmp/aws-access-key-id.log
-
       # Clone the deployer repo
       - name: Clone the deployer repo
         run: |
@@ -29,11 +21,25 @@ jobs:
           git clone https://github.com/IBM/cloud-pak-deployer.git
           
       # Build the deployer
-      - name: Build the deployer
+#       - name: Build the deployer
+#         run: |
+#           cd ~/cloud-pak-deployer
+#           ./cp-deploy.sh build
+
+  configure:
+    needs: build
+    runs-on: self-hosted
+
+    steps:
+      - name: Retrieve the configuration
+        uses: actions/checkout@v3
+        
+      - name: Copy the configuration to the specified config dir
         run: |
-          cd ~/cloud-pak-deployer
-          ./cp-deploy.sh build
-          
+          mkdir -p ~/cpd-config
+          rm -f ~/cpd-config/*
+          cp -r config ~/cpd-config/
+        
       - name: Write OpenShift pull secret to temporary file
         env:
           OCP_PULLSECRET: ${{ secrets.OCP_PULLSECRET }}
