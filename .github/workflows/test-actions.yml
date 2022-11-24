@@ -38,8 +38,8 @@ jobs:
         run: |
           ls -lR
           mkdir -p ~/cpd-config
-          rm -rf ~/cpd-config/*
-          cp -r config ~/cpd-config/
+          rm -rfv ~/cpd-config/*
+          cp -rv cpd-config/config ~/cpd-config/
         
       - name: Write OpenShift pull secret to temporary file
         env:
