@@ -37,7 +37,7 @@ jobs:
       - name: Copy the configuration to the specified config dir
         run: |
           mkdir -p ~/cpd-config
-          rm -f ~/cpd-config/*
+          rm -rf ~/cpd-config/*
           cp -r config ~/cpd-config/
         
       - name: Write OpenShift pull secret to temporary file
