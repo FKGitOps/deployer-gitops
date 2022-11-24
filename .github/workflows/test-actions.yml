@@ -25,10 +25,10 @@ jobs:
           git clone https://github.com/IBM/cloud-pak-deployer.git
           
       # Build the deployer
-#       - name: Build the deployer
-#         run: |
-#           cd ~/cloud-pak-deployer
-#           ./cp-deploy.sh build
+      - name: Build the deployer
+        run: |
+          cd ~/cloud-pak-deployer
+          ./cp-deploy.sh build
 
   configure:
     needs: build
@@ -64,3 +64,21 @@ jobs:
       - name: List vault secrets
         run: |
           ~/cloud-pak-deployer/cp-deploy.sh vault list
+          
+  check-configuration:
+    needs: configure
+    runs-on: self-hosted
+
+    steps:
+      - name: Check configuration
+        run: |
+          ~/cloud-pak-deployer/cp-deploy.sh env apply --check-only
+
+  deploy:
+    needs: check-configuration
+    runs-on: self-hosted
+
+    steps:
+      - name: Run deployment
+        run: |
+          ~/cloud-pak-deployer/cp-deploy.sh env apply -v
