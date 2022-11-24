@@ -13,6 +13,7 @@ openshift:
 - name: "fk-ocp"
   ocp_version: 4.10.34
   domain_name: dapper-test.eu
+  control_polane_flavour: m5.2xlarge
   compute_flavour: m5.4xlarge
   compute_nodes: 3
   infrastructure:
