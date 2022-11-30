@@ -5,23 +5,24 @@ global_config:
   aws_region: eu-west-1
 
 nfs_server:
-- name: "fk-ocp-elastic"
+- name: deployer-demo-aws-elastic
   infrastructure:
     aws_region: "{{ aws_region }}"
 
 openshift:
-- name: "fk-ocp"
+- name: aws-demo
   ocp_version: 4.10.34
-  domain_name: dapper-test.eu
+  domain_name: deployer-demo.eu
   control_plane_flavour: m5.2xlarge
   control_plane_nodes: 3
   compute_flavour: m5.4xlarge
   compute_nodes: 3
+  console_banner: "cp4d 4.5.3 on AWS"
   infrastructure:
     type: self-managed
     aws_region: "{{ aws_region }}"
     multi_zone: True
     use_sts: False
   openshift_storage:
-  - storage_name: "fk-ocp-elastic"
+  - storage_name: deployer-demo-aws-elastic
     storage_type: aws-elastic
