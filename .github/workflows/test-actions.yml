@@ -1,8 +1,8 @@
 name: Coud Pak Deployer git flow
 
 env:
-  CONFIG_DIR: /home/deployer/cpd-config
-  STATUS_DIR: /home/deployer/cpd-status
+  CONFIG_DIR: /Data/deployer-demo-config
+  STATUS_DIR: /Data/deployer-demo-status
 
 # Controls when the workflow will run
 on:
