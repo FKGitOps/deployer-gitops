@@ -148,7 +148,7 @@ cp4d:
 
   - name: wml
     size: small
-    state: removed
+    state: installed
 
   - name: wml-accelerator
     replicas: 1
