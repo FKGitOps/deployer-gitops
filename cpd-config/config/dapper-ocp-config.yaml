@@ -1,0 +1,32 @@
+---
+global_config:
+  environment_name: sample
+  cloud_platform: aws
+  aws_region: eu-central-1
+
+nfs_server:
+- name: dapper-elastic
+  infrastructure:
+    aws_region: "{{ aws_region }}"
+
+openshift:
+- name: dapper
+  domain_name: dapper-test.eu
+  ocp_version: 4.10.41
+  control_plane_flavour: m5.xlarge
+  control_plane_nodes: 3
+  compute_flavour: m5.4xlarge
+  compute_nodes: 4
+  oadp: True
+  infrastructure:
+    type: self-managed
+    aws_region: "{{ aws_region }}"
+    multi_zone: False
+    use_sts: False
+    machine_cidr: 10.1.0.0/24
+    subnet_ids:
+    - subnet-00e616175d02a40b3
+    - subnet-0a659ba01cf2fbf9e
+  openshift_storage:
+  - storage_name: dapper-elastic
+    storage_type: aws-elastic
