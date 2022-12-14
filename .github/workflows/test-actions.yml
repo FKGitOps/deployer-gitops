@@ -81,6 +81,6 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Run deployment
+      - name: Run deployment (OpenShift only)
         run: |
-          ~/cloud-pak-deployer/cp-deploy.sh env apply -v
+          ~/cloud-pak-deployer/cp-deploy.sh env apply --skip-cp-install -v
