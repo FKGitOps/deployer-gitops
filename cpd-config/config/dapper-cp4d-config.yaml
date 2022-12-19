@@ -98,7 +98,7 @@ cp4d:
     size: small 
     instances:
     - name: data-virtualization
-    state: removed
+    state: installed
 
   # Please note that for EDB Postgress, a secret edb-postgres-license-key must be created in the vault
   # before deploying

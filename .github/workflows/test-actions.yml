@@ -83,4 +83,4 @@ jobs:
     steps:
       - name: Run deployment (OpenShift only)
         run: |
-          ~/cloud-pak-deployer/cp-deploy.sh env apply --skip-cp-install -v
+          ~/cloud-pak-deployer/cp-deploy.sh env apply -v

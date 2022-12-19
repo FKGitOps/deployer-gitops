@@ -11,7 +11,7 @@ nfs_server:
 
 openshift:
 - name: dapper
-  domain_name: dapper-test.eu
+  domain_name: deployer-demo.eu
   ocp_version: 4.10.41
   control_plane_flavour: m5.xlarge
   control_plane_nodes: 3
