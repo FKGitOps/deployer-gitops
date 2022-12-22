@@ -5,12 +5,12 @@ global_config:
   aws_region: eu-central-1
 
 nfs_server:
-- name: dapper-elastic
+- name: deployer-demo-elastic
   infrastructure:
     aws_region: "{{ aws_region }}"
 
 openshift:
-- name: dapper
+- name: deployer-aws
   domain_name: deployer-demo.eu
   ocp_version: 4.10.41
   control_plane_flavour: m5.xlarge
@@ -29,5 +29,5 @@ openshift:
     - subnet-00e616175d02a40b3
     - subnet-0a659ba01cf2fbf9e
   openshift_storage:
-  - storage_name: dapper-elastic
+  - storage_name: deployer-demo-elastic
     storage_type: aws-elastic
