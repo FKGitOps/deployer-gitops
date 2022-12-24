@@ -22,7 +22,7 @@ jobs:
         run: |
           cd ~
           rm -rf ~/cloud-pak-deployer
-          git clone https://github.com/IBM/cloud-pak-deployer.git -b fk-misc
+          git clone https://github.com/IBM/cloud-pak-deployer.git -b aws-changes
           
       # Build the deployer
       - name: Build the deployer
