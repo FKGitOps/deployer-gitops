@@ -28,6 +28,7 @@ openshift:
     subnet_ids:
     - subnet-00e616175d02a40b3
     - subnet-0a659ba01cf2fbf9e
+    ami_id: ami-09249dd86b1933dd5
   openshift_storage:
   - storage_name: deployer-demo-elastic
     storage_type: aws-elastic
