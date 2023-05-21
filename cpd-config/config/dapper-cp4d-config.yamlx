@@ -2,7 +2,7 @@
 cp4d:
 - project: cpd-aws
   openshift_cluster_name: deployer-aws
-  cp4d_version: 4.6.0
+  cp4d_version: 4.6.
   accept_licenses: True
   sequential_install: False
   cartridges:
@@ -37,7 +37,7 @@ cp4d:
     instances:
     - name: ca-instance
       metastore_ref: ca-metastore
-    state: installed
+    state: removed
 
   - name: cde
     state: removed
@@ -46,7 +46,7 @@ cp4d:
     state: removed
 
   - name: datastage-ent-plus
-    state: installed
+    state: removed
     # instances:
     #   - name: ds-instance
     #     # Optional settings    
@@ -77,13 +77,13 @@ cp4d:
       data_size_gb: 50
       backup_size_gb: 50
       transactionlog_size_gb: 50
-    state: installed
+    state: removed
 
   - name: db2wh
     state: removed
 
   - name: dmc
-    state: installed
+    state: removed
 
   - name: dods
     size: small
@@ -97,7 +97,7 @@ cp4d:
     size: small 
     instances:
     - name: data-virtualization
-    state: installed
+    state: removed
 
   # Please note that for EDB Postgress, a secret edb-postgres-license-key must be created in the vault
   # before deploying
@@ -164,7 +164,7 @@ cp4d:
 
   - name: wkc
     size: small
-    state: installed
+    state: removed
     installation_options:
       install_wkc_core_only: True
 
