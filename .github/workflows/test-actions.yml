@@ -14,7 +14,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+  #     runs-on: self-hosted
 
     steps:
       # Clone the deployer repo
@@ -22,7 +22,7 @@ jobs:
         run: |
           cd ~
           rm -rf ~/cloud-pak-deployer
-          git clone https://github.com/IBM/cloud-pak-deployer.git -b aws-changes
+          git clone https://github.com/IBM/cloud-pak-deployer.git
           
       # Build the deployer
       - name: Build the deployer
@@ -32,7 +32,7 @@ jobs:
 
   configure:
     needs: build
-    runs-on: self-hosted
+#     runs-on: self-hosted
 
     steps:
       - name: Retrieve the configuration
