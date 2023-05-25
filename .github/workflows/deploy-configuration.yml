@@ -28,6 +28,7 @@ jobs:
 
   configure:
     needs: build
+    runs-on: ubuntu-latest
 
     steps:
       - name: Retrieve the configuration
@@ -51,6 +52,7 @@ jobs:
           
   check-configuration:
     needs: configure
+    runs-on: ubuntu-latest
 
     steps:
       - name: Check configuration
@@ -64,6 +66,7 @@ jobs:
 
   deploy:
     needs: check-configuration
+    runs-on: ubuntu-latest
 
     steps:
       - name: Run deployment (OpenShift only)
