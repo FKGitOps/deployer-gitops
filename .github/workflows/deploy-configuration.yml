@@ -47,7 +47,8 @@ jobs:
                   
       - name: List vault secrets
         env:
-          CONFIG_DIR: ${{ github.workspace }}/cpd-config      
+          CONFIG_DIR: ${{ github.workspace }}/cpd-config
+          IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
         working-directory: /tmp/cloud-pak-deployer
         run: |
           ./cp-deploy.sh vault list
