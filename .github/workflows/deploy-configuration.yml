@@ -36,6 +36,7 @@ jobs:
         
       - name: Set vault secrets
         env:
+          CONFIG_DIR: ${{ github.workspace }}/cpd-config
           OCP_PULLSECRET: ${{ secrets.OCP_PULLSECRET }}
           IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
         working-directory: /tmp/cloud-pak-deployer
@@ -45,12 +46,15 @@ jobs:
           ./cp-deploy.sh vault set -vs ocp-pullsecret -vsf ${{ github.workspace }}/cpd-config/ocp_pullsecret.json
                   
       - name: List vault secrets
+        env:
+          CONFIG_DIR: ${{ github.workspace }}/cpd-config      
         working-directory: /tmp/cloud-pak-deployer
         run: |
           ./cp-deploy.sh vault list
           
       - name: Check configuration
         env:
+          CONFIG_DIR: ${{ github.workspace }}/cpd-config
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           CP_ENTITLEMENT_KEY: ${{ secrets.CP_ENTITLEMENT_KEY }}
@@ -61,6 +65,7 @@ jobs:
 
       - name: Run deployment (OpenShift only)
         env:
+          CONFIG_DIR: ${{ github.workspace }}/cpd-config
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           CP_ENTITLEMENT_KEY: ${{ secrets.CP_ENTITLEMENT_KEY }}
