@@ -1,8 +1,13 @@
 ---
 global_config:
-  environment_name: sample
+  environment_name: deployer-demo
   cloud_platform: aws
   aws_region: eu-central-1
+
+vault:
+  vault_type: ibmcloud-vault
+  vault_authentication_type: api-key
+  vault_url: https://caabac85-40ab-40d5-965a-a7e9debd5e37.eu-de.secrets-manager.appdomain.cloud
 
 nfs_server:
 - name: deployer-demo-elastic
@@ -16,8 +21,8 @@ openshift:
   control_plane_flavour: m5.xlarge
   control_plane_nodes: 3
   compute_flavour: m5.4xlarge
-  compute_nodes: 4
-  console_banner: "cp4d 4.5.3 AWS"
+  compute_nodes: 3
+  console_banner: "cp4d 4.6.6 AWS"
   oadp: True
   infrastructure:
     type: self-managed
@@ -25,10 +30,6 @@ openshift:
     multi_zone: False
     use_sts: False
     machine_cidr: 10.1.0.0/24
-    subnet_ids:
-    - subnet-00e616175d02a40b3
-    - subnet-0a659ba01cf2fbf9e
-    ami_id: ami-09249dd86b1933dd5
   openshift_storage:
   - storage_name: deployer-demo-elastic
     storage_type: aws-elastic

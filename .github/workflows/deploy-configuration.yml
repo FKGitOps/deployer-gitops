@@ -1,20 +1,15 @@
-name: Coud Pak Deployer git flow
-
-env:
-  CONFIG_DIR: /Data/dapper-aws-config
-  STATUS_DIR: /Data/dapper-aws-status
+name: Cloud Pak Deployer git flow
 
 # Controls when the workflow will run
 on:
   push:
-    branches: [ "removed" ]
+    branches: [ "main" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
   build:
-  #     runs-on: self-hosted
 
     steps:
       # Clone the deployer repo
@@ -32,36 +27,22 @@ jobs:
 
   configure:
     needs: build
-#     runs-on: self-hosted
 
     steps:
       - name: Retrieve the configuration
         uses: actions/checkout@v3
         
-      - name: Copy the configuration to the specified config dir
+      - name: Show the configuration directory
         run: |
           ls -lR
-          mkdir -p $CONFIG_DIR
-          rm -rfv $CONFIG_DIR/*
-          cp -rv cpd-config/config $CONFIG_DIR/
         
-      - name: Write OpenShift pull secret to temporary file
-        env:
-          OCP_PULLSECRET: ${{ secrets.OCP_PULLSECRET }}
-        run: |
-          echo $OCP_PULLSECRET > $CONFIG_DIR/ocp_pullsecret.json
-          
       - name: Set vault secrets
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          CP_ENTITLEMENT_KEY: ${{ secrets.CP_ENTITLEMENT_KEY }}
+          OCP_PULLSECRET: ${{ secrets.OCP_PULLSECRET }}
+          IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
         run: |
-          ~/cloud-pak-deployer/cp-deploy.sh vault set -vs ibm_cp_entitlement_key -vsv $CP_ENTITLEMENT_KEY
-          ~/cloud-pak-deployer/cp-deploy.sh vault set -vs aws-access-key -vsv $AWS_ACCESS_KEY_ID
-          ~/cloud-pak-deployer/cp-deploy.sh vault set -vs aws-secret-access-key -vsv $AWS_SECRET_ACCESS_KEY
+          echo $OCP_PULLSECRET > ~/cpd-config/ocp_pullsecret.json
           ~/cloud-pak-deployer/cp-deploy.sh vault set -vs ocp-pullsecret -vsf $CONFIG_DIR/ocp_pullsecret.json
-          ~/cloud-pak-deployer/cp-deploy.sh vault set -vs ocp-ssh-pub-key -vsf ~/.ssh/id_rsa.pub
                   
       - name: List vault secrets
         run: |
@@ -69,18 +50,26 @@ jobs:
           
   check-configuration:
     needs: configure
-    runs-on: self-hosted
 
     steps:
       - name: Check configuration
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          CP_ENTITLEMENT_KEY: ${{ secrets.CP_ENTITLEMENT_KEY }}
+          IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
         run: |
           ~/cloud-pak-deployer/cp-deploy.sh env apply --check-only
 
   deploy:
     needs: check-configuration
-    runs-on: self-hosted
 
     steps:
       - name: Run deployment (OpenShift only)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          CP_ENTITLEMENT_KEY: ${{ secrets.CP_ENTITLEMENT_KEY }}
+          IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
         run: |
           ~/cloud-pak-deployer/cp-deploy.sh env apply -v
