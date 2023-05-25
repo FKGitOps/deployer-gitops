@@ -31,10 +31,8 @@ jobs:
         
       - name: Show the configuration directory
         run: |
-          echo $PWD
           echo ${{ github.workspace }}
-          ls -lR
-          ls -lR /tmp
+          ls -lR ${{ github.workspace }}
         
       - name: Set vault secrets
         env:
