@@ -31,21 +31,21 @@ jobs:
       - name: Show the configuration directory
         run: |
           echo $PWD
-          echo $GITHUB_WORKSPACE
+          echo ${{ github.workspace }}
           ls -lR
         
       - name: Set vault secrets
         env:
           OCP_PULLSECRET: ${{ secrets.OCP_PULLSECRET }}
           IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
-        working-directory: $GITHUB_WORKSPACE/cloud-pak-deployer
+        working-directory: ${{ github.workspace }}/cloud-pak-deployer
         run: |
-          echo $OCP_PULLSECRET > $GITHUB_WORKSPACE/cpd-config/ocp_pullsecret.json
-          cat $GITHUB_WORKSPACE/cpd-config/ocp_pullsecret.json
-          ./cp-deploy.sh vault set -vs ocp-pullsecret -vsf $GITHUB_WORKSPACE/cpd-config/ocp_pullsecret.json
+          echo $OCP_PULLSECRET > ${{ github.workspace }}/cpd-config/ocp_pullsecret.json
+          cat ${{ github.workspace }}/cpd-config/ocp_pullsecret.json
+          ./cp-deploy.sh vault set -vs ocp-pullsecret -vsf ${{ github.workspace }}/cpd-config/ocp_pullsecret.json
                   
       - name: List vault secrets
-        working-directory: $GITHUB_WORKSPACE/cloud-pak-deployer
+        working-directory: ${{ github.workspace }}/cloud-pak-deployer
         run: |
           ./cp-deploy.sh vault list
           
@@ -55,7 +55,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           CP_ENTITLEMENT_KEY: ${{ secrets.CP_ENTITLEMENT_KEY }}
           IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
-        working-directory: $GITHUB_WORKSPACE/cloud-pak-deployer
+        working-directory: ${{ github.workspace }}/cloud-pak-deployer
         run: |
           ./cp-deploy.sh env apply --check-only
 
@@ -65,6 +65,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           CP_ENTITLEMENT_KEY: ${{ secrets.CP_ENTITLEMENT_KEY }}
           IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
-        working-directory: $GITHUB_WORKSPACE/cloud-pak-deployer
+        working-directory: ${{ github.workspace }}/cloud-pak-deployer
         run: |
           ./cp-deploy.sh env apply -v
