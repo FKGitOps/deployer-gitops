@@ -20,7 +20,7 @@ jobs:
           
       # Build the deployer
       - name: Build the deployer
-        working-directory: $GITHUB_WORKSPACE/cloud-pak-deployer
+        working-directory: ${{ github.GITHUB_WORKSPACE }}/cloud-pak-deployer
         run: |
           ./cp-deploy.sh build
         
