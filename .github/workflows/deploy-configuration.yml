@@ -15,12 +15,13 @@ jobs:
     steps:
       # Clone the deployer repo
       - name: Clone the deployer repo
+        working-directory: /tmp
         run: |
           git clone https://github.com/IBM/cloud-pak-deployer.git -b fk-misc 
           
       # Build the deployer
       - name: Build the deployer
-        working-directory: ${{ github.workspace }}/cloud-pak-deployer
+        working-directory: /tmp/cloud-pak-deployer
         run: |
           ./cp-deploy.sh build
         
@@ -33,19 +34,20 @@ jobs:
           echo $PWD
           echo ${{ github.workspace }}
           ls -lR
+          ls -lR /tmp
         
       - name: Set vault secrets
         env:
           OCP_PULLSECRET: ${{ secrets.OCP_PULLSECRET }}
           IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
-        working-directory: ${{ github.workspace }}/cloud-pak-deployer
+        working-directory: /tmp/cloud-pak-deployer
         run: |
           echo $OCP_PULLSECRET > ${{ github.workspace }}/cpd-config/ocp_pullsecret.json
           cat ${{ github.workspace }}/cpd-config/ocp_pullsecret.json
           ./cp-deploy.sh vault set -vs ocp-pullsecret -vsf ${{ github.workspace }}/cpd-config/ocp_pullsecret.json
                   
       - name: List vault secrets
-        working-directory: ${{ github.workspace }}/cloud-pak-deployer
+        working-directory: /tmp/cloud-pak-deployer
         run: |
           ./cp-deploy.sh vault list
           
@@ -55,7 +57,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           CP_ENTITLEMENT_KEY: ${{ secrets.CP_ENTITLEMENT_KEY }}
           IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
-        working-directory: ${{ github.workspace }}/cloud-pak-deployer
+        working-directory: /tmp/cloud-pak-deployer
         run: |
           ./cp-deploy.sh env apply --check-only
 
@@ -65,6 +67,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           CP_ENTITLEMENT_KEY: ${{ secrets.CP_ENTITLEMENT_KEY }}
           IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
-        working-directory: ${{ github.workspace }}/cloud-pak-deployer
+        working-directory: /tmp/cloud-pak-deployer
         run: |
           ./cp-deploy.sh env apply -v
