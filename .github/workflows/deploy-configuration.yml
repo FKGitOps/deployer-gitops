@@ -9,28 +9,21 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       # Clone the deployer repo
       - name: Clone the deployer repo
         run: |
-          cd ~
-          rm -rf ~/cloud-pak-deployer
           git clone https://github.com/IBM/cloud-pak-deployer.git
           
       # Build the deployer
       - name: Build the deployer
         run: |
-          cd ~/cloud-pak-deployer
+          cd $GITHUB_WORKSPACE/cloud-pak-deployer
           ./cp-deploy.sh build
 
-  configure:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Retrieve the configuration
         uses: actions/checkout@v3
         
@@ -53,11 +46,6 @@ jobs:
         run: |
           ~/cloud-pak-deployer/cp-deploy.sh vault list
           
-  check-configuration:
-    needs: configure
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Check configuration
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -67,11 +55,6 @@ jobs:
         run: |
           ~/cloud-pak-deployer/cp-deploy.sh env apply --check-only
 
-  deploy:
-    needs: check-configuration
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Run deployment (OpenShift only)
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
