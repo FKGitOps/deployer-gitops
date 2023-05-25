@@ -36,6 +36,7 @@ jobs:
         
       - name: Show the configuration directory
         run: |
+          echo $PWD
           ls -lR
         
       - name: Set vault secrets
@@ -44,7 +45,7 @@ jobs:
           IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
         run: |
           echo $OCP_PULLSECRET > ~/cpd-config/ocp_pullsecret.json
-          ~/cloud-pak-deployer/cp-deploy.sh vault set -vs ocp-pullsecret -vsf $CONFIG_DIR/ocp_pullsecret.json
+          ~/cloud-pak-deployer/cp-deploy.sh vault set -vs ocp-pullsecret -vsf ~/cpd-config/ocp_pullsecret.json
                   
       - name: List vault secrets
         run: |
