@@ -1,4 +1,4 @@
-name: Coud Pak Deployer git flow
+name: Testing actions
 
 env:
   CONFIG_DIR: /Data/dapper-aws-config
