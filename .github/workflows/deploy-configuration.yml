@@ -20,9 +20,10 @@ jobs:
           
       # Build the deployer
       - name: Build the deployer
+        working-directory: $GITHUB_WORKSPACE/cloud-pak-deployer
         run: |
-          cd $GITHUB_WORKSPACE/cloud-pak-deployer
           ./cp-deploy.sh build
+        
 
       - name: Retrieve the configuration
         uses: actions/checkout@v3
@@ -37,14 +38,16 @@ jobs:
         env:
           OCP_PULLSECRET: ${{ secrets.OCP_PULLSECRET }}
           IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
+        working-directory: $GITHUB_WORKSPACE/cloud-pak-deployer
         run: |
           echo $OCP_PULLSECRET > $GITHUB_WORKSPACE/cpd-config/ocp_pullsecret.json
           cat $GITHUB_WORKSPACE/cpd-config/ocp_pullsecret.json
-          ~/cloud-pak-deployer/cp-deploy.sh vault set -vs ocp-pullsecret -vsf $GITHUB_WORKSPACE/cpd-config/ocp_pullsecret.json
+          ./cp-deploy.sh vault set -vs ocp-pullsecret -vsf $GITHUB_WORKSPACE/cpd-config/ocp_pullsecret.json
                   
       - name: List vault secrets
+        working-directory: $GITHUB_WORKSPACE/cloud-pak-deployer
         run: |
-          ~/cloud-pak-deployer/cp-deploy.sh vault list
+          ./cp-deploy.sh vault list
           
       - name: Check configuration
         env:
@@ -52,8 +55,9 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           CP_ENTITLEMENT_KEY: ${{ secrets.CP_ENTITLEMENT_KEY }}
           IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
+        working-directory: $GITHUB_WORKSPACE/cloud-pak-deployer
         run: |
-          ~/cloud-pak-deployer/cp-deploy.sh env apply --check-only
+          ./cp-deploy.sh env apply --check-only
 
       - name: Run deployment (OpenShift only)
         env:
@@ -61,5 +65,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           CP_ENTITLEMENT_KEY: ${{ secrets.CP_ENTITLEMENT_KEY }}
           IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
+        working-directory: $GITHUB_WORKSPACE/cloud-pak-deployer
         run: |
-          ~/cloud-pak-deployer/cp-deploy.sh env apply -v
+          ./cp-deploy.sh env apply -v
