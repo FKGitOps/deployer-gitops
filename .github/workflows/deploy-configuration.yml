@@ -37,6 +37,7 @@ jobs:
       - name: Show the configuration directory
         run: |
           echo $PWD
+          echo $GITHUB_WORKSPACE
           ls -lR
         
       - name: Set vault secrets
@@ -44,8 +45,9 @@ jobs:
           OCP_PULLSECRET: ${{ secrets.OCP_PULLSECRET }}
           IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
         run: |
-          echo $OCP_PULLSECRET > ~/cpd-config/ocp_pullsecret.json
-          ~/cloud-pak-deployer/cp-deploy.sh vault set -vs ocp-pullsecret -vsf ~/cpd-config/ocp_pullsecret.json
+          echo $OCP_PULLSECRET > $GITHUB_WORKSPACE/cpd-config/ocp_pullsecret.json
+          cat $GITHUB_WORKSPACE/cpd-config/ocp_pullsecret.json
+          ~/cloud-pak-deployer/cp-deploy.sh vault set -vs ocp-pullsecret -vsf $GITHUB_WORKSPACE/cpd-config/ocp_pullsecret.json
                   
       - name: List vault secrets
         run: |
