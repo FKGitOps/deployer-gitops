@@ -16,11 +16,11 @@ jobs:
       # Clone the deployer repo
       - name: Clone the deployer repo
         run: |
-          git clone https://github.com/IBM/cloud-pak-deployer.git
+          git clone https://github.com/IBM/cloud-pak-deployer.git -b fk-misc 
           
       # Build the deployer
       - name: Build the deployer
-        working-directory: ${{ github.GITHUB_WORKSPACE }}/cloud-pak-deployer
+        working-directory: ${{ github.workspace }}/cloud-pak-deployer
         run: |
           ./cp-deploy.sh build
         
