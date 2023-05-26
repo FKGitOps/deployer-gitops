@@ -1,0 +1,87 @@
+name: Cloud Pak Deployer git flow
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Clone the deployer repo
+      - name: Clone the deployer repo
+        working-directory: /tmp
+        run: |
+          git clone https://github.com/IBM/cloud-pak-deployer.git -b fk-misc 
+          
+      # Build the deployer
+      - name: Build the deployer
+        working-directory: /tmp/cloud-pak-deployer
+        run: |
+          ./cp-deploy.sh build
+        
+  retrieve-config:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Retrieve the configuration
+        uses: actions/checkout@v3
+        
+      - name: Show the configuration directory
+        run: |
+          echo ${{ github.workspace }}
+          ls -lR ${{ github.workspace }}
+        
+  check-config:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set vault secrets
+        env:
+          CONFIG_DIR: ${{ github.workspace }}/cpd-config
+          OCP_PULLSECRET: ${{ secrets.OCP_PULLSECRET }}
+          IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
+        working-directory: /tmp/cloud-pak-deployer
+        run: |
+          echo $OCP_PULLSECRET > ${{ github.workspace }}/cpd-config/ocp_pullsecret.json
+          cat ${{ github.workspace }}/cpd-config/ocp_pullsecret.json
+          ./cp-deploy.sh vault set -vs ocp-pullsecret -vsf ${{ github.workspace }}/cpd-config/ocp_pullsecret.json
+                  
+      - name: List vault secrets
+        env:
+          CONFIG_DIR: ${{ github.workspace }}/cpd-config
+          IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
+        working-directory: /tmp/cloud-pak-deployer
+        run: |
+          ./cp-deploy.sh vault list
+          
+      - name: Check configuration
+        env:
+          CONFIG_DIR: ${{ github.workspace }}/cpd-config
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          CP_ENTITLEMENT_KEY: ${{ secrets.CP_ENTITLEMENT_KEY }}
+          IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
+        working-directory: /tmp/cloud-pak-deployer
+        run: |
+          ./cp-deploy.sh env apply --check-only
+
+  deploy-config:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run deployment
+        env:
+          CONFIG_DIR: ${{ github.workspace }}/cpd-config
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          CP_ENTITLEMENT_KEY: ${{ secrets.CP_ENTITLEMENT_KEY }}
+          IBM_CLOUD_API_KEY: ${{ secrets.IBM_CLOUD_API_KEY }}
+        working-directory: /tmp/cloud-pak-deployer
+        run: |
+          ./cp-deploy.sh env apply -v
