@@ -15,7 +15,7 @@ jobs:
       - name: Clone the deployer repo
         working-directory: /tmp
         run: |
-          git clone https://github.com/IBM/cloud-pak-deployer.git -b fk-misc 
+          git clone https://github.com/IBM/cloud-pak-deployer.git
           
       # Build the deployer
       - name: Build the deployer
