@@ -126,7 +126,7 @@ cp4d:
     state: removed
 
   - name: spss
-    state: installed
+    state: removed
 
   - name: voice-gateway
     replicas: 1
