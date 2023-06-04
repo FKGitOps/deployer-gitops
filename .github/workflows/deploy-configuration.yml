@@ -64,7 +64,7 @@ jobs:
         run: |
           ./cp-deploy.sh env apply --check-only
 
-      - name: Run deployment (OpenShift only)
+      - name: Run deployment
         env:
           CONFIG_DIR: ${{ github.workspace }}/cpd-config
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
